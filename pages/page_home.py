@@ -5,6 +5,7 @@ from locators.yandex_locators import Locators
 
 class PageHome:
     """Actions for Yandex home page"""
+
     def __init__(self, driver):
         self.driver = driver
 
@@ -12,17 +13,21 @@ class PageHome:
         self.suggest_dropdown_xpath = Locators.suggest_dropdown_xpath
         self.search_btn_xpath = Locators.search_btn_xpath
 
+
     def get_input_txtbox(self):
         """Gets search input textbox"""
         return self.driver.find_element_by_xpath(self.search_input_xpath)
+
 
     def enter_search_text(self, text):
         """Enters a text into the searchbox"""
         self.driver.find_element_by_xpath(self.search_input_xpath).send_keys(text)
 
+
     def enter_n_submit_search_text(self, text):
         """Enters a text into the search box and simulate pressing Enter key"""
         self.enter_search_text(text+"\n")
+
 
     def suggests_are_visible(self):
         """Tests if suggest dropdown is shown"""
@@ -35,6 +40,25 @@ class PageHome:
             return False
         return True
 
+
     def click_search_btn(self):
         """Clicks the main search button"""
         self.driver.find_element_by_xpath(self.search_btn_xpath).click()
+
+
+    def get_link_with_text(self, text):
+        """Returns the link with <text> or returns False if the link is not available"""
+        try:
+            link = self.driver.find_element_by_link_text(text)
+        except:
+            return False
+        return link
+
+
+    def click_link_with_text(self, text):
+        """Clicks the link with <text> or returns False if the link is not available"""
+        link = self.get_link_with_text(text)
+        if not link:
+            return False
+        link.click()
+        return True
