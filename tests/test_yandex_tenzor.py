@@ -21,64 +21,62 @@ sys.path.insert(0, my_path + '/../')
 class TestYandexSearch(Base):
 
 
-    # @allure.title("Testing for textBox and suggests dropdown")
-    # @allure.severity(Severity.NORMAL)
-    # def test_suggest(self):
-    #
-    #     with allure.step("Verify if search textbox is available"):
-    #         page_home = PageHome(self.driver)
-    #         try:
-    #             page_home.get_input_txtbox()
-    #         except NoSuchElementException:
-    #             raise AssertionError("The search textbox wasn't found")
-    #
-    #     text = "Тензор"
-    #     with allure.step(f"Enter {text}"):
-    #         page_home.enter_search_text(text)
-    #
-    #     with allure.step("Verify if suggests dropdown is shown"):
-    #         if not page_home.suggests_are_visible():
-    #             raise AssertionError("The suggests dropdown didn't appear")
-    #
-    #     time.sleep(1) # FixMe to observe
-    #
-    #
-    # @allure.title('Testing for search results')
-    # @allure.severity(Severity.CRITICAL)
-    # def test_search_results(self):
-    #
-    #     text = "Тензор"
-    #     with allure.step(f"Enter {text} and simulate pressing Enter key"):
-    #         page_home = PageHome(self.driver)
-    #         page_home.enter_n_submit_search_text(text)
-    #
-    #     with allure.step("Verify that the result page is loaded"):
-    #         page_results = PageResults(self.driver)
-    #         if not page_results.results_page_has_loaded():
-    #             raise AssertionError("Results didn't load")
-    #
-    #     with allure.step("Verify that results are loaded"):
-    #         if not page_results.results_are_loaded():
-    #             raise AssertionError("Results didn't load")
-    #
-    #     link = "https://tensor.ru/"
-    #     number_of_results = 5
-    #     with allure.step("Count links number"):
-    #         counter = page_results.links_number_in_results(link, number_of_results, self.implicitly_wait)
-    #         if counter != number_of_results:
-    #             # FIXME take a screenshot
-    #             raise AssertionError(f"Only {counter} of {number_of_results} result rows contain the link {link}")
-    #
-    #     time.sleep(1) # FixMe to observe
+    @allure.title("01 Testing for textBox and suggests dropdown")
+    @allure.severity(Severity.NORMAL)
+    def test_suggest(self):
+
+        with allure.step("Verify if search textbox is available"):
+            page_home = PageHome(self.driver)
+            try:
+                page_home.get_input_txtbox()
+            except NoSuchElementException:
+                raise AssertionError("The search textbox wasn't found")
+
+        text = "Тензор"
+        with allure.step(f"Enter {text}"):
+            page_home.enter_search_text(text)
+
+        with allure.step("Verify if suggests dropdown is shown"):
+            if not page_home.suggests_are_visible():
+                raise AssertionError("The suggests dropdown didn't appear")
+
+        time.sleep(1) # FixMe to observe
 
 
-    @allure.title("Testing Yandex search for pictures.")
+    @allure.title('02 Testing for search results')
     @allure.severity(Severity.CRITICAL)
-    def test_picture(self, break_on_category_mismatch=False):
+    def test_search_results(self):
 
+        text = "Тензор"
+        with allure.step(f"Enter {text} and simulate pressing Enter key"):
+            page_home = PageHome(self.driver)
+            page_home.enter_n_submit_search_text(text)
+
+        with allure.step("Verify that the result page is loaded"):
+            page_results = PageResults(self.driver)
+            if not page_results.results_page_has_loaded():
+                raise AssertionError("Results didn't load")
+
+        with allure.step("Verify that results are loaded"):
+            if not page_results.results_are_loaded():
+                raise AssertionError("Results didn't load")
+
+        link = "https://tensor.ru/"
+        number_of_results = 5
+        with allure.step("Count links number"):
+            counter = page_results.links_number_in_results(link, number_of_results, self.implicitly_wait)
+            if counter != number_of_results:
+                # FIXME take a screenshot
+                raise AssertionError(f"Only {counter} of {number_of_results} result rows contain the link {link}")
+
+        time.sleep(1) # FixMe to observe
+
+
+
+    def open_images_page(self, page_home, page_images):
+        """Part one of tests until clicking the category"""
         text = "Картинки"
         with allure.step(f'Verify that "{text}" is available '):
-            page_home = PageHome(self.driver)
             if not page_home.get_link_with_text(text):
                 raise AssertionError(f'No link with text "{text}" is available on the page')
 
@@ -96,18 +94,40 @@ class TestYandexSearch(Base):
                 raise AssertionError("Can't switch to a new handle")
 
         with allure.step(f'Verify that the images page is loaded'):
-            page_images = PageImages(self.driver)
             if not page_images.image_page_has_loaded():
                 raise AssertionError("Images page didn't load")
+
+    @allure.title("03 Testing Yandex search for mismatch between a clicked category and a text in opened page")
+    @allure.severity(Severity.CRITICAL)
+    def test_picture_category(self):
+        page_home = PageHome(self.driver)
+        page_images = PageImages(self.driver)
+
+        with allure.step("Open page Images"):
+            self.open_images_page(page_home, page_images)
 
         with allure.step('Open the first category'):
             category_text = page_images.click_first_category()
             if not category_text:
                 raise AssertionError("There is no categories")
 
-        if not break_on_category_mismatch:
-            with allure.step("Compare the input text to a clicked category"):
-                if not (page_images.compare_input_text(category_text)):
-                    raise AssertionError(f'The input text is not compared to the clicked category "{category_text}"')
+        with allure.step("Compare the input text to a clicked category"):
+            if not (page_images.compare_input_text(category_text)):
+                raise AssertionError(f'The input text is not compared to the clicked category "{category_text}"')
 
         time.sleep(1) # FixMe to observe
+
+
+    @allure.title("04 Testing opening the first page and moving forward and backward")
+    @allure.severity(Severity.CRITICAL)
+    def test_open_yandex_image(self):
+        page_home = PageHome(self.driver)
+        page_images = PageImages(self.driver)
+
+        with allure.step("Open page Images"):
+            self.open_images_page(page_home, page_images)
+
+
+
+
+
