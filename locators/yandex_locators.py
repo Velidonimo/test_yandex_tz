@@ -11,4 +11,10 @@ class Locators:
 
     # ====== images page ======
     categories_link_xpath = '//a[@class="Link PopularRequestList-Preview"]'
+    # image link in image results
+    images_link_xpath = '//a[@class ="serp-item__link"]'
+    # directly img in the link
+    link_img_xpath = './/img'
+    # title of an opened picture
+    openimg_title_xpath = '//div[@class="MMOrganicSnippet-Text"]'
 
