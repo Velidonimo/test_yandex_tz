@@ -17,7 +17,7 @@ class PageResults:
 
 
     def results_page_has_loaded(self):
-        """Wait and verify that the results page is loaded"""
+        """Waits and verifies that the results page is loaded"""
         try:
             WebDriverWait(self.driver, 5, 0.5).until(EC.url_contains(self.url_beginning))
         except TimeoutException:
@@ -26,7 +26,7 @@ class PageResults:
 
 
     def results_are_loaded(self):
-        """Wait and verify that result rows are loaded"""
+        """Waits and verifies that result rows are loaded"""
         def results_number_10(driver):
             return len(driver.find_elements_by_xpath(self.results_row_xpath)) >= 10
 
@@ -38,7 +38,7 @@ class PageResults:
 
 
     def results_contain_links(self, link, number_of_results):
-        """Verify that the first <number_of_results> of results contain <link>"""
+        """Verifies that the first <number_of_results> of results contain <link>"""
         result_rows = self.driver.find_elements_by_xpath(self.results_row_xpath)
         if not result_rows:
             return False
@@ -49,3 +49,30 @@ class PageResults:
             except NoSuchElementException:
                 return False
         return True
+
+
+    def links_number_in_results(self, link, number_of_results, default_implicitly_wait):
+        """
+        Counts result rows with <link> in first <number_of_results> search results
+        :param link: the link to look for
+        :param number_of_results: number of first rows in results to look in
+        :param default_implicitly_wait: the base driver implicitly wait value for test
+        """
+        result_rows = self.driver.find_elements_by_xpath(self.results_row_xpath)
+        if not result_rows:
+            return False
+
+        # speed up test, because the page is already loaded
+        self.driver.implicitly_wait(0)
+
+        counter = 0
+        for result in result_rows[0:number_of_results]:
+            try:
+                result.find_element_by_xpath(f'.//a[@href="{link}"]')
+                counter += 1
+            except NoSuchElementException:
+                continue
+
+        # return the implicitly_wait value
+        self.driver.implicitly_wait(default_implicitly_wait)
+        return counter

@@ -58,13 +58,14 @@ class TestYandexSearch(Base):
 
         link = "https://tensor.ru/"
         number_of_results = 5
-        with allure.step(f"Verify that the first {number_of_results} results contain link {link}"):
-            if not page_results.results_contain_links(link, number_of_results):
-                raise AssertionError(f"None or not all {number_of_results} results contain link")
+        with allure.step("Count links number"):
+            counter = page_results.links_number_in_results(link, number_of_results, self.implicitly_wait)
+            if counter != number_of_results:
+                raise AssertionError(f"Only {counter} of {number_of_results} result rows contain the link {link}")
 
         time.sleep(1) # FixMe to observe
 
 
-    @allure.title("Testing Yandex search for pictures.")
-    def test_picture(self):
-        pass
+    # @allure.title("Testing Yandex search for pictures.")
+    # def test_picture(self):
+    #     pass
