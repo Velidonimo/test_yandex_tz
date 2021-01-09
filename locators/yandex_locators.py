@@ -1,8 +1,5 @@
 class Locators:
 
-
-    #FIXME use clases
-
     # ====== main page =======
     search_input_name = 'text'
     suggest_dropdown_xpath = '//div/ul[@class="mini-suggest__popup-content"]/..'
