@@ -18,13 +18,9 @@ class Locators:
     images_link_xpath = '//a[@class ="serp-item__link"]'
     # directly img in the link
     link_img_xpath = './/img'
-    # title of an opened picture
-    # openimg_title_xpath = '//div[@class="MMOrganicSnippet-Text"]' FIXME
     # preview for opened image
     preview_bigimg_class = 'MMImage-Preview'
     # tag with link to download for opened image
     link_bigimg_class = 'MMImage-Origin'
     forward_circlebtn_class = 'MediaViewer_theme_fiji-ButtonNext'
     backwards_circlebtn_class = 'MediaViewer_theme_fiji-ButtonPrev'
-
-

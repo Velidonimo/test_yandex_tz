@@ -1,4 +1,3 @@
-from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.common.exceptions import TimeoutException, NoSuchElementException, NoSuchAttributeException
 from locators.yandex_locators import Locators
@@ -12,6 +11,7 @@ class PageImages:
 
     def __init__(self, driver):
         self.driver = driver
+
 
     def image_page_has_loaded(self):
         """Waits and verifies that the images page is loaded"""
@@ -43,7 +43,7 @@ class PageImages:
             return driver.find_element_by_name(Locators.search_input_name).get_attribute("value") == text
 
         try:
-            WebDriverWait(self.driver, 5, 0.5).until(wait_for_input_to_load)
+            WebDriverWait(self.driver, 5).until(wait_for_input_to_load)
         except TimeoutException:
             return False
 
@@ -96,6 +96,7 @@ class PageImages:
         except NoSuchElementException:
             return False
         return True
+
 
     def click_backward_btn(self):
         """Clicks the backwards circle button. Returns false, if cannot find it"""

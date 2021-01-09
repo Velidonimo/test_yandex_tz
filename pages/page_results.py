@@ -17,7 +17,7 @@ class PageResults:
     def results_page_has_loaded(self):
         """Waits and verifies that the results page is loaded"""
         try:
-            WebDriverWait(self.driver, 5, 0.5).until(EC.url_contains(self.url_beginning))
+            WebDriverWait(self.driver, 5).until(EC.url_contains(self.url_beginning))
         except TimeoutException:
             return False
         return True
@@ -29,7 +29,7 @@ class PageResults:
             return len(driver.find_elements_by_xpath(Locators.results_row_xpath)) >= 10
 
         try:
-            WebDriverWait(self.driver, 5, 0.5).until(results_number_10)
+            WebDriverWait(self.driver, 5).until(results_number_10)
         except TimeoutException:
             return False
         return True
@@ -71,6 +71,6 @@ class PageResults:
             except NoSuchElementException:
                 continue
 
-        # return the implicitly_wait value
+        # return back the implicitly_wait value
         self.driver.implicitly_wait(default_implicitly_wait)
         return counter
