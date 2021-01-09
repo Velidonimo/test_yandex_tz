@@ -1,5 +1,6 @@
 import pytest
 from selenium.webdriver.chrome.webdriver import WebDriver
+import allure
 
 
 class Base:
@@ -12,7 +13,8 @@ class Base:
         url = 'https://yandex.ru/'
         self.driver = WebDriver(executable_path='D:/AQA/chromedriver.exe')
         self.driver.implicitly_wait(self.implicitly_wait)
-        self.driver.get(url)
+        with allure.step(f"Open {url}"):
+            self.driver.get(url)
 
         yield self.driver
 

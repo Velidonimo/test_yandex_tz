@@ -1,5 +1,5 @@
 from selenium.webdriver.support.wait import WebDriverWait
-from selenium.common.exceptions import TimeoutException
+from selenium.common.exceptions import TimeoutException, NoSuchElementException
 from locators.yandex_locators import Locators
 
 
@@ -9,19 +9,18 @@ class PageHome:
     def __init__(self, driver):
         self.driver = driver
 
-        self.search_input_xpath = Locators.search_input_xpath
-        self.suggest_dropdown_xpath = Locators.suggest_dropdown_xpath
-        self.search_btn_xpath = Locators.search_btn_xpath
-
-
     def get_input_txtbox(self):
-        """Gets search input textbox"""
-        return self.driver.find_element_by_xpath(self.search_input_xpath)
+        """Returns the search input textbox if available or False"""
+        try:
+            self.driver.find_element_by_name(Locators.search_input_name)
+        except NoSuchElementException:
+            return False
+        return True
 
 
     def enter_search_text(self, text):
         """Enters a text into the searchbox"""
-        self.driver.find_element_by_xpath(self.search_input_xpath).send_keys(text)
+        self.driver.find_element_by_name(Locators.search_input_name).send_keys(text)
 
 
     def enter_n_submit_search_text(self, text):
@@ -32,10 +31,10 @@ class PageHome:
     def suggests_are_visible(self):
         """Tests if suggest dropdown is shown"""
         def visibility(driver):
-            return "popup_visible" in driver.find_element_by_xpath(self.suggest_dropdown_xpath).get_attribute('class')
+            return "popup_visible" in driver.find_element_by_xpath(Locators.suggest_dropdown_xpath).get_attribute('class')
 
         try:
-            WebDriverWait(self.driver, 2, 0.5).until(visibility)
+            WebDriverWait(self.driver, 2).until(visibility)
         except TimeoutException:
             return False
         return True
@@ -43,7 +42,7 @@ class PageHome:
 
     def click_search_btn(self):
         """Clicks the main search button"""
-        self.driver.find_element_by_xpath(self.search_btn_xpath).click()
+        self.driver.find_element_by_xpath(Locators.search_btn_xpath).click()
 
 
     def get_link_with_text(self, text):

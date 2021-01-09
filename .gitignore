@@ -3,6 +3,7 @@ results
 .ipynb_checkpoints
 *.ipynb
 .idea
+*.jpg
 
 
 # Byte-compiled / optimized / DLL files

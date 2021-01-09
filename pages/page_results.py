@@ -13,8 +13,6 @@ class PageResults:
     def __init__(self, driver):
         self.driver = driver
 
-        self.results_row_xpath = Locators.results_row_xpath
-
 
     def results_page_has_loaded(self):
         """Waits and verifies that the results page is loaded"""
@@ -28,7 +26,7 @@ class PageResults:
     def results_are_loaded(self):
         """Waits and verifies that result rows are loaded"""
         def results_number_10(driver):
-            return len(driver.find_elements_by_xpath(self.results_row_xpath)) >= 10
+            return len(driver.find_elements_by_xpath(Locators.results_row_xpath)) >= 10
 
         try:
             WebDriverWait(self.driver, 5, 0.5).until(results_number_10)
@@ -39,7 +37,7 @@ class PageResults:
 
     def results_contain_links(self, link, number_of_results):
         """Verifies that the first <number_of_results> of results contain <link>"""
-        result_rows = self.driver.find_elements_by_xpath(self.results_row_xpath)
+        result_rows = self.driver.find_elements_by_xpath(Locators.results_row_xpath)
         if not result_rows:
             return False
 
@@ -58,7 +56,7 @@ class PageResults:
         :param number_of_results: number of first rows in results to look in
         :param default_implicitly_wait: the base driver implicitly wait value for test
         """
-        result_rows = self.driver.find_elements_by_xpath(self.results_row_xpath)
+        result_rows = self.driver.find_elements_by_xpath(Locators.results_row_xpath)
         if not result_rows:
             return False
 
