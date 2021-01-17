@@ -24,7 +24,7 @@ class TestYandexSearch(Base):
             if not page_home.get_input_txtbox():
                 raise AssertionError("The search textbox wasn't found")
 
-        text = "Тензор"
+        text = "Apple"
         with allure.step(f"Enter {text}"):
             page_home.enter_search_text(text)
 
@@ -37,7 +37,7 @@ class TestYandexSearch(Base):
     @allure.severity(Severity.CRITICAL)
     def test_search_results(self):
 
-        text = "Тензор"
+        text = "Магнит"
         with allure.step(f"Enter {text} and simulate pressing Enter key"):
             page_home = PageHome(self.driver)
             page_home.enter_n_submit_search_text(text)
@@ -51,7 +51,7 @@ class TestYandexSearch(Base):
             if not page_results.results_are_loaded():
                 raise AssertionError("Results didn't load")
 
-        link = "https://tensor.ru/"
+        link = "https://magnit.ru/"
         number_of_results = 5
         with allure.step("Count links number"):
             counter = page_results.links_number_in_results(link, number_of_results, self.implicitly_wait)
